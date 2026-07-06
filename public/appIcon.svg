@@ -1,0 +1,18 @@
+<svg width="512" height="512" viewBox="120 80 272 230" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Signal Arcs -->
+  <path d="M176 300 A80 80 0 0 1 336 300"
+        stroke="#38BDF8" stroke-width="18" fill="none"/>
+  <path d="M206 300 A50 50 0 0 1 306 300"
+        stroke="#7DD3FC" stroke-width="18" fill="none"/>
+
+  <!-- Arrow -->
+  <line x1="256" y1="170" x2="256" y2="285"
+        stroke="#22C55E" stroke-width="22"/>
+  <polygon points="256,120 222,172 290,172"
+           fill="#22C55E"/>
+
+  <!-- Destination Dot -->
+  <circle cx="256" cy="300" r="16" fill="#22C55E"/>
+
+</svg>
