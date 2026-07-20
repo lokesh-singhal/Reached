@@ -17,7 +17,6 @@ export async function POST(req: NextRequest) {
         .digest("hex");
     
         const isValid = generatedSignature === razorpay_signature;
-        console.log(isValid);
         if(!isValid) {
             return NextResponse.json({message: "Invalid razorpay payment"}, {status: 400});
         }

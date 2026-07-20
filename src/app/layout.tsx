@@ -4,6 +4,9 @@ import "./globals.css";
 import Navbar from "./components/navbar/Navbar";
 import Script from "next/script";
 import "leaflet/dist/leaflet.css";
+import "react-day-picker/dist/style.css";
+import { Toaster } from "./components/ui/sonner";
+import Footer from "./components/Footer";
 
 
 const geistSans = Geist({
@@ -29,13 +32,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <Script
           src="https://checkout.razorpay.com/v1/checkout.js"
         />
         <Navbar />
-        {children}
+
+
+        <main className="flex-1">
+          <Toaster />
+          {children}
+        </main>
+        
+
+        <Footer />
       </body>
     </html>
   );

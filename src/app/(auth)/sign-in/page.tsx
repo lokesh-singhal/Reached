@@ -1,7 +1,10 @@
 'use client';
+import { Spinner } from "@/app/components/ui/spinner";
 import { authClient } from "@/lib/auth-client";
 import { redirect, useRouter } from "next/navigation";
+import { useState } from "react";
 import { Form, SubmitHandler, useForm } from "react-hook-form"
+import { toast } from "sonner";
 
 type Inputs = {
   Username: string,
@@ -9,6 +12,7 @@ type Inputs = {
 }
 
 export default function SignIn() {
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const {
     register,
@@ -21,9 +25,23 @@ export default function SignIn() {
     const { data, error } = await authClient.signIn.username({
       username: userData.Username,
       password: userData.Password,
+    }, {
+      onRequest(ctx) {
+        setLoading(true);
+      },
+      onError(ctx) {
+        setLoading(false);
+        toast.error(ctx.error.message.split(";")[0].trim(), {
+          style: {
+            background: 'red',
+          }
+        });
+      },
+      onSuccess: (ctx) => {
+        setLoading(false);
+        router.push("/");
+      },
     });
-
-    router.push("/dashboard");
   }
 
   const handleClick = async () => {
@@ -63,9 +81,9 @@ export default function SignIn() {
               </div>
               <button
                 type="submit"
-                className="w-full bg-blue-700 text-white font-bold py-2 rounded-full hover:bg-blue-800 transition"
+                className="w-full bg-blue-700 disabled:bg-blue-500 disabled:cursor-not-allowed flex justify-center text-white font-bold py-2 rounded-full hover:bg-blue-800 transition"
               >
-                Log In
+                {loading ? <Spinner className="size-6" /> : "Login"}
               </button>
             </form>
             <div className="flex items-center mb-6 mt-3">

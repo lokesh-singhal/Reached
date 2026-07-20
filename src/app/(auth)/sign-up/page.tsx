@@ -1,7 +1,10 @@
 'use client';
+import { Spinner } from "@/app/components/ui/spinner";
 import { authClient } from "@/lib/auth-client";
 import { redirect, useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { toast } from "sonner";
 
 
 type Inputs = {
@@ -9,10 +12,12 @@ type Inputs = {
     Email: string,
     Password: string,
     Username: string
+    ProfilePhoto: FileList
 }
 
 export default function signUp() {
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
     const {
         register,
         handleSubmit,
@@ -28,13 +33,19 @@ export default function signUp() {
             username: userData.Username
         }, {
             onRequest: (ctx) => {
-                console.log("Loading...");
+                setLoading(true);
             },
             onSuccess: (ctx) => {
+                setLoading(false);
                 redirect("/sign-in");
             },
             onError: (ctx) => {
-                console.log(ctx.error.message);
+                setLoading(false);
+                toast.error(ctx.error.message.split(";")[0].trim(), {
+                    style: {
+                        background: 'red',
+                    }
+                });
             },
         });
     }
@@ -55,6 +66,7 @@ export default function signUp() {
         { name: "Name", label: "Full Name", type: "text" },
         { name: "Email", label: "Email Address", type: "email" },
         { name: "Password", label: "Password", type: "password" },
+        // { name: "ProfilePhoto", label: "Profile Photo", type: "file" },
     ];
 
     return (
@@ -89,19 +101,24 @@ export default function signUp() {
                                     </label>
                                     <input
                                         id={field.name}
-                                        className="border py-2 rounded-md border-gray-300 px-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className={field.type !== "file" ? "border py-2 rounded-md border-gray-300 px-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            : "file:mr-4 file:rounded-lg file:border-0 file:bg-gray-400 file:px-4 file:py-1 file:text-black file:cursor-pointer"
+                                        }
                                         placeholder={`Enter your ${field.label.toLowerCase()}`}
                                         type={field.type}
                                         {...register(field.name as keyof Inputs)}
+                                        {...(field.type === "file") && {
+                                            accept: "image/*",
+                                        }}
                                     />
                                 </div>
                             ))}
 
                             <button
                                 type="submit"
-                                className="w-full bg-blue-700 text-white font-bold py-2 rounded-full hover:bg-blue-800 transition"
+                                className="w-full bg-blue-700 disabled:bg-blue-500 disabled:cursor-not-allowed flex justify-center text-white font-bold py-2 rounded-full hover:bg-blue-800 transition"
                             >
-                                Create an Account
+                                {loading ? <Spinner className="size-6" /> : "Create an account"}
                             </button>
                         </form>
 

@@ -8,7 +8,34 @@ export async function GET() {
     try {
         await dbConnect();
 
-        const listing = await ListingService.getAllListing();
+        // const listing = await ListingService.getAllListing();
+        const listing = await ListingModel.aggregate([
+            {
+                $lookup: {
+                    from: "reviews",
+                    localField:"_id",
+                    foreignField: "listingId",
+                    as: "reviews",
+                    
+                }
+            },
+            {
+                $addFields:{
+                    reviewCount: {$size: "$reviews"},
+                    averageRating: {
+                        $round:[
+                            {
+                                $ifNull: [
+                                    { $avg: "$reviews.rating"},
+                                    0
+                                ]
+                            },
+                            1
+                        ]
+                    },
+                }
+            }
+        ]);
         
         return NextResponse.json(listing, {status: 200});
     } catch (error) {

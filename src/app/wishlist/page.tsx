@@ -26,6 +26,7 @@ type Listing = {
   maxGuests: number,
   price: number,
   status: string,
+  averageRating: number,
 }
 
 const Wishlist = () => {
@@ -38,14 +39,13 @@ const Wishlist = () => {
       const res = await fetch("/api/favourites");
       if (!res.ok) return;
       const data = await res.json();
-      const listings = data.map((item: any) => item.listingId);
+      const listings = data.map((item: any) => item.listing);
       setListing(listings)
     };
 
     getFavourite();
   }, [])
 
-  console.log(listing);
 
   const handleListing = (list: string) => {
     router.push(`/rooms/${list}`);
@@ -75,7 +75,7 @@ const Wishlist = () => {
                         <h1 className="font-medium truncate">
                           {item.title}
                         </h1>
-                        <span>⭐ 5.0</span>
+                        <span>⭐ {item.averageRating}</span>
                       </div>
 
                       <p className="truncate text-gray-600">
@@ -98,7 +98,7 @@ const Wishlist = () => {
               </div>
             </div>
           </div>
-          <div className="hidden lg:block fixed top-[13.5%] right-0 w-[40%] h-[calc(100vh-13.5%)] bg-white">
+          <div className="hidden lg:block fixed top-[16%] right-0 w-[40%] h-[calc(100vh-16%)] bg-white">
             <Map listing={listing} />
           </div>
         </div>

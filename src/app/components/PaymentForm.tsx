@@ -5,6 +5,8 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form"
 import DateRangePicker from "./DateRangePicker"
 import { useState } from "react"
 import GuestPopover from "./GuestsPop"
+import { Spinner } from "./ui/spinner"
+import { toast } from "sonner"
 
 type Inputs = {
     checkInDate: string
@@ -22,7 +24,7 @@ const PaymentForm = ({ price, maxGuests, listingId }: cardProps) => {
         handleSubmit,
         watch,
         setValue,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm<Inputs>({
         defaultValues: {
             guest: 1
@@ -30,6 +32,7 @@ const PaymentForm = ({ price, maxGuests, listingId }: cardProps) => {
     });
     const router = useRouter();
     const [showCalendar, setShowCalendar] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [showGuests, setShowGuests] = useState(false)
 
     const today = new Date().toISOString().split("T")[0];
@@ -41,9 +44,16 @@ const PaymentForm = ({ price, maxGuests, listingId }: cardProps) => {
         ? new Date(new Date(checkIn).setDate(new Date(checkIn).getDate() - 5))
         : null;
 
-    const onSubmit: SubmitHandler<Inputs> = (data) => {
-        console.log(data);
-        const checkBooking = async () => {
+    const onSubmit: SubmitHandler<Inputs> = async (data) => {
+        if (!checkIn || !checkOut) {
+            toast.warning("Please enter valid dates", {
+                style: {
+                    background: "red",
+                }
+            });
+            return;
+        }
+        try {
             const res = await fetch(`/api/listings/${listingId}/availability`, {
                 method: "POST",
                 headers: {
@@ -52,16 +62,20 @@ const PaymentForm = ({ price, maxGuests, listingId }: cardProps) => {
                 body: JSON.stringify(data)
             });
             const result = await res.json();
-            console.log(result);
             if (result.available) {
+                setIsLoading(true);
                 router.push(`/book/${listingId}?checkIn=${data.checkInDate}&checkOut=${data.checkOutDate}&guests=${data.guest}`);
-            }else{
-                console.log("Overlapping dates");
+            } else {
+                toast.error("Booking not available for this date", {
+                    style: {
+                        background: 'red',
+                    }
+                })
             }
-
+        } catch (error) {
+            console.log(error);
         }
 
-        checkBooking();
     }
 
     return (
@@ -71,7 +85,7 @@ const PaymentForm = ({ price, maxGuests, listingId }: cardProps) => {
                     <div className='text-3xl font-semibold'>Add dates for prices</div>
                 ) : (
                     <span className='text-xl'><span className='text-3xl font-semibold underline'>
-                        ₹{price && price*((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / (1000 * 60 * 60 * 24))}</span> 
+                        ₹{price && price * ((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / (1000 * 60 * 60 * 24))}</span>
                         {" "}for {((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / (1000 * 60 * 60 * 24))} nights</span>
                 )
                 }
@@ -142,20 +156,22 @@ const PaymentForm = ({ price, maxGuests, listingId }: cardProps) => {
                     )}
                     {checkIn && (
                         < div className=' text-center bg-gray-100 rounded-md p-1'>
-                    {refundDate! > new Date() ? (
-                        <div>Free Cancellation before {refundDate?.toISOString().split("T")[0]}</div>
-                    ) : (
-                        <div>No Cancellation Available</div>
-                    )
-                    }
-                </div>
+                            {refundDate! > new Date() ? (
+                                <div>Free Cancellation before {refundDate?.toISOString().split("T")[0]}</div>
+                            ) : (
+                                <div>No Cancellation Available</div>
+                            )
+                            }
+                        </div>
                     )}
-                <button className='bg-green-400 p-3 rounded-full text-xl font-semibold' type='submit'>Reserve</button>
-                <div className='text-center text-[15px]'>You won't be charget yet</div>
-            </div>
-            {/* errors will return when field validation fails  */}
-            {/* {errors.checkInDate && <span>This field is required</span>} */}
-        </form >
+                    <button disabled={isSubmitting || isLoading} className='bg-green-400 disabled:bg-green-200 disabled:cursor-not-allowed p-3 rounded-full text-xl font-semibold cursor-pointer flex justify-center' type='submit'>
+                        {isSubmitting || isLoading === true ? <Spinner className="size-6" /> : "Reserve"}
+                    </button>
+                    <div className='text-center text-[15px]'>You won't be charget yet</div>
+                </div>
+                {/* errors will return when field validation fails  */}
+                {/* {errors.checkInDate && <span>This field is required</span>} */}
+            </form >
         </>
     )
 }

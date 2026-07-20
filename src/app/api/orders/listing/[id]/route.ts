@@ -12,16 +12,15 @@ export async function GET(_: NextRequest, { params }: Params) {
         await dbConnect();
 
         const reservations = await BookingModel.find({listing: id});
-        console.log(reservations);
         
         const reservedDates = reservations.map((booking) => ({
             from: booking.checkIn,
             to: booking.checkOut
         }));
-        console.log(reservedDates);
 
         return NextResponse.json(reservedDates);
     } catch (error) {
-        
+        console.log(error);
+        return NextResponse.json({message: "Failed to get reserved days"}, {status: 500});
     }
 }

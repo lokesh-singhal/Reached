@@ -2,7 +2,6 @@ import NoReservations from './NoReservations';
 
 export default function ShowReservations({ line, upcoming, complete, setReviewBooking }: { line: string, upcoming: any, complete: any, setReviewBooking:any }) {
 
-    console.log("Completed", complete);
     return (
         <>
             {line == "upcoming" && (

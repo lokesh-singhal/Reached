@@ -14,7 +14,7 @@ export default function GuestPopover(
     }
 ) {
   const searchParam = useSearchParams();
-  const guest = searchParam.get("guests") || 1;
+  const guest = searchParam.get("guests") !== "undefined" ?  searchParam.get("guests") : 1;
   const [guests, setGuests] = useState(Number(guest));
   const popoverRef = useRef<HTMLDivElement>(null);
   const updateParam = useUpdateUrlParams();
@@ -60,7 +60,7 @@ export default function GuestPopover(
 
             <div>
               <p className="font-medium">Guests</p>
-              <p className="text-sm text-gray-500">Maximum {maxGuests} guests</p>
+              <p className={`text-sm text-gray-500 ${!maxGuests ? "hidden": ""}`}>Maximum {maxGuests} guests</p>
             </div>
 
             <div className="flex items-center gap-3">

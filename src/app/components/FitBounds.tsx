@@ -6,7 +6,6 @@ import L from "leaflet";
 
 export default function FitBounds({ listings }: any) {
     const map = useMap();
-    console.log(listings);
     useEffect(() => {
         if (listings.length === 0) return;
 

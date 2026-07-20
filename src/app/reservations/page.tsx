@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import NoReservations from "../components/NoReservations";
 import ShowReservations from "../components/ShowReservations";
 import Review from "../components/Review";
+import { toast } from "sonner";
 
 interface Booking {
     _id: string,
@@ -23,9 +24,7 @@ export default function Reservations() {
             if (!res.ok) {
                 return;
             }
-
             const data = await res.json();
-            console.log(data.filter((items: any) => items.status === "CONFIRMED" && new Date(items.checkIn).setHours(0,0,0,0) >= new Date().setHours(0,0,0,0)));
             setUpcoming(data.filter((items: any) => items.status === "CONFIRMED" && new Date(items.checkIn).setHours(0,0,0,0) >= new Date().setHours(0,0,0,0)));
             setComplete(data.filter((items: any) => items.status === "CONFIRMED" && new Date(items.checkOut) < new Date()));
         }
@@ -33,15 +32,18 @@ export default function Reservations() {
         gatherReservations();
     }, [])
 
-    console.log(upcoming)
-    console.log(complete)
+  
 
     return (
         <div className="relative">
-            {reviewBooking && <div className="absolute z-10 inset-0 bg-black/50 h-full" />}
+            {reviewBooking && <div className="fixed z-100 inset-0 bg-black/50 h-full" />}
             {reviewBooking && (
                 <div>
-                    <div className="z-10 fixed bg-gray-100 w-1/2 top-1/2 left-1/2 -translate-x-1/2 -translate-y-3/7 p-4 rounded-2xl">
+                    <div className="z-100 fixed bg-gray-100 p-4 rounded-2xl overflow-y-auto
+                                    top-2 bottom-2 left-2 right-2
+                                    sm:left-6 sm:right-6
+                                    md:left-12 md:right-12 md:top-8 md:bottom-8
+                                    lg:w-1/2 lg:h-auto lg:top-1/2 lg:left-1/2 lg:right-auto lg:bottom-auto lg:-translate-x-1/2 lg:-translate-y-3/7 ">
                         <Review setComplete={setComplete} reviewBooking={reviewBooking} setReviewBooking={setReviewBooking} />
                     </div>
                 </div>

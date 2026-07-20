@@ -11,7 +11,8 @@ interface ListingType {
   houseImageUrl: string[];
   title: string,
   maxGuests: number,
-  price: number
+  price: number,
+  averageRating: number,
 }
 
 function subtractDays(date: Date, days: number) {
@@ -29,7 +30,7 @@ export default function BookingSummary({ listing, checkIn, checkOut, guests }: {
   const nights = (checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24);
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border p-6 space-y-6">
+    <div className="bg-white rounded-2xl relative shadow-sm border p-6 space-y-6">
 
       <div className="flex gap-4">
         <div className="relative w-50 rounded-xl">
@@ -47,7 +48,7 @@ export default function BookingSummary({ listing, checkIn, checkOut, guests }: {
             {listing.title}
           </h3>
           <p className="text-sm text-gray-600 mt-1">
-            ★ 4.94 (16) · Guest favourite
+            ★ {listing.averageRating} • {listing.averageRating >= 3 ? "Guest Favourite": ""}
           </p>
         </div>
       </div>
@@ -79,9 +80,10 @@ export default function BookingSummary({ listing, checkIn, checkOut, guests }: {
           Change
         </button>
       </div>
-
       {showCalendar && (
-        <div className="absolute top-48 right-1/3 z-50">
+        <div className="fixed inset-0 h-dvh z-999 flex items-center justify-center
+         bg-black/40 p-4
+         lg:absolute lg:inset-auto lg:bg-transparent lg:p-0 lg:top-0 lg:right-5">
           <DateRangePicker
             listingId={listing._id}
             checkInDate={checkInDate}
@@ -89,9 +91,7 @@ export default function BookingSummary({ listing, checkIn, checkOut, guests }: {
             setShowCalendar={setShowCalendar}
             onSave={(range: any) => {
               const inDate = range.from.toISOString().split("T")[0];
-              console.log(range.from.toISOString());
               const outDate = range.to.toISOString().split("T")[0];
-              console.log(inDate, outDate);
               setShowCalendar(false);
               updateParam({
                 checkIn: inDate,
@@ -113,13 +113,13 @@ export default function BookingSummary({ listing, checkIn, checkOut, guests }: {
               {guests} guests
             </p>
           </div>
-          <button onClick={() => setShowGuests(!showGuests)} className="bg-gray-100 px-4 py-1 rounded-lg text-sm">
+          <button  onClick={() => setShowGuests((prev) => !prev)} className="bg-gray-100 px-4 py-1 rounded-lg text-sm">
             Change
           </button>
         </div>
 
         {showGuests && (
-          <div className="absolute right-0 top-10 w-85 bg-white shadow-xl rounded-xl p-3 z-50 border">
+          <div className="absolute max-sm:-left-8 right-0 top-10 w-85 bg-white shadow-xl rounded-xl p-3 z-999 border">
             <GuestPopover
               showGuests={showGuests}
               setShowGuests={setShowGuests}

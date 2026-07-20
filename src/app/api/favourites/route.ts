@@ -5,30 +5,40 @@ import { NextRequest, NextResponse } from "next/server";
 
 
 export async function GET(req: NextRequest) {
-    await dbConnect();
-    const session = await auth.api.getSession({ headers: req.headers });
-    if (!session?.session?.userId) {
-       return NextResponse.json([], {status: 200});
+    try {
+        await dbConnect();
+        const session = await auth.api.getSession({ headers: req.headers });
+        if (!session?.session?.userId) {
+           return NextResponse.json([], {status: 200});
+        }
+        const userId = session?.session.userId;
+    
+        const listings = await FavouriteService.getFavourite(userId);
+    
+        return NextResponse.json(listings);    
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json({message: "Failed to get listing"}, {status: 500});
     }
-    const userId = session?.session.userId;
-
-    const listings = await FavouriteService.getFavourite(userId);
-
-    return NextResponse.json(listings);
 }
 
 export async function POST(req: NextRequest) {
-    await dbConnect();
-    const session = await auth.api.getSession({ headers: req.headers });
-    if (!session?.session?.userId) {
-        return NextResponse.json({status: 200});
+    try {
+        await dbConnect();
+        const session = await auth.api.getSession({ headers: req.headers });
+        if (!session?.session?.userId) {
+            return NextResponse.json({status: 200});
+        }
+    
+        const {listingId} = await req.json();
+        const result = await FavouriteService.toggleFavourite({
+            listingId,
+            userId: session.session.userId
+        })
+    
+        return NextResponse.json(result);
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json({message: "Failed to get the favourites"}, {status: 500})
     }
-
-    const {listingId} = await req.json();
-    const result = await FavouriteService.toggleFavourite({
-        listingId,
-        userId: session.session.userId
-    })
-
-    return NextResponse.json(result);
 }

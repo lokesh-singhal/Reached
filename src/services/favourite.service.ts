@@ -23,11 +23,59 @@ class FavouriteService {
             throw new Error("Invalid userId")
         }
 
-        const favourite = await FavouriteModel.find({
-            userId
-        })
-        .populate("listingId");
+        // const favourite = await FavouriteModel.find({
+        //     userId
+        // })
+        // .populate("listingId");
 
+       
+        const favourite = await FavouriteModel.aggregate([
+            {
+                $match: { 
+                    userId: new mongoose.Types.ObjectId(userId),
+                }
+            },
+            {
+                $lookup: {
+                    from: "listings",
+                    foreignField: "_id",
+                    localField: "listingId",
+                    as: "listing",
+                }
+            },
+            {
+                $unwind: "$listing",
+            },
+            {
+                $lookup: {
+                    from: "reviews",
+                    foreignField: "listingId",
+                    localField: "listing._id",
+                    as: "reviews",
+                }
+            },
+            {
+                $addFields: {
+                    "listing.reviewCount": { $size: "$reviews" },
+                    "listing.averageRating": {
+                        $round: [
+                            {
+                                $ifNull: [
+                                    { $avg: "$reviews.rating" },
+                                    0,
+                                ],
+                            },
+                            1,
+                        ],
+                    },
+                },
+            },
+            {
+                $project: {
+                    reviews: 0,
+                },
+            },
+        ]);
         return favourite;
     }
 

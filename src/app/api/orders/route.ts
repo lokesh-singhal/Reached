@@ -25,7 +25,6 @@ export async function GET(req: NextRequest) {
 
         await dbConnect();
         const getReviews = await ReviewModel.find({reviewerId:session.session.userId});
-        console.log(getReviews);
         const reservations = await BookingModel.aggregate([
             {
                 $match: {
@@ -69,7 +68,6 @@ export async function GET(req: NextRequest) {
                 }
             }
         ]);
-        console.log(reservations);
         return NextResponse.json(reservations);
     } catch (error) {
         console.log(error);
@@ -97,7 +95,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: "Incorrect Listing Id" }, { status: 400 });
         }
 
-        const previousReservation = await BookingModel.find({
+        const previousReservation = await BookingModel.exists({
             listing: listingId,
             checkIn: {$lt: checkOutDate},
             checkOut: {$gt: checkInDate}
@@ -137,6 +135,7 @@ export async function POST(req: NextRequest) {
             currency: order.currency,
             bookingId: newBooking._id
         })
+
 
     } catch (error) {
         console.log(error);

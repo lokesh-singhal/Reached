@@ -1,6 +1,8 @@
 import ListingModel from "@/models/Listing";
 import "@/models/AuthUser";
 import mongoose from "mongoose";
+import BookingModel from "@/models/Booking";
+import ReviewModel from "@/models/Review";
 
 interface createListingInput {
     hostId: string,
@@ -16,6 +18,10 @@ interface createListingInput {
     };
     maxGuests: number,
     price: number,
+}
+
+interface ReviewType {
+    rating: number,
 }
 
 class ListingService {
@@ -51,6 +57,11 @@ class ListingService {
             throw new Error("Invalid Listing id");
         }
 
+        const reviews:ReviewType[] | null = await ReviewModel.find({
+            listingId,
+        })
+
+        const averageRating = reviews && reviews.length > 0 ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length : 0;
         const listing = await ListingModel
             .findById(listingId)
             .populate("host", "name email");
@@ -59,7 +70,12 @@ class ListingService {
             throw new Error("No listing available")
         }
 
-        return listing;
+        const result = {
+            ...listing.toObject(),
+            averageRating: Number(averageRating.toFixed(1)),
+        }
+
+        return result;
     }
 
     static async updateListing(listingId: string, hostId: string, updates: Partial<createListingInput>) {
