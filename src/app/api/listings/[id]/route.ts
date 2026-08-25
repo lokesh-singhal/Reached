@@ -1,6 +1,9 @@
+import { auth } from "@/lib/auth";
 import { authClient } from "@/lib/auth-client";
 import dbConnect from "@/lib/db";
+import BookingModel from "@/models/Booking";
 import ListingService from "@/services/listing.service";
+import { apiKey } from "better-auth/plugins";
 import { NextRequest, NextResponse } from "next/server";
 
 interface Params {
@@ -24,7 +27,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     try {
         await dbConnect();
 
-        const { data: session } = await authClient.getSession();
+        const session = await auth.api.getSession({headers: req.headers});
         const {id} = await params;
 
         if (!session) {
@@ -34,7 +37,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
         const body = await req.json();
         const listing = await ListingService.updateListing(
             id,
-            session.user.id,
+            session.session.userId,
             body
         )
 
@@ -45,24 +48,36 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     }
 }
 
-export async function DELETE(_: NextRequest, { params }: Params) {
+export async function DELETE(req: NextRequest, { params }: Params) {
     try {
         await dbConnect();
         const { id } = await params;
-        const { data: session } = await authClient.getSession();
+        const session = await auth.api.getSession({headers: req.headers});
         if (!session) {
             return NextResponse.json({ message: "Unauthorized Access" }, { status: 400 });
         }
-        await ListingService.deleteListing(id, session.user.id);
+
+        const bookings = await BookingModel.exists({
+            listing: id,
+            checkOut: {
+                $gte: Date.now(),
+            }
+        });
+        if(bookings){
+            return NextResponse.json({message: "Listing cannot be deleted due to active bookings"}, {status: 400});
+        }
+
+        await ListingService.deleteListing(id, session.session.userId);
         return NextResponse.json(
             { message: "Listing deleted successfully" },
             { status: 200 }
         );
 
     } catch (error: any) {
+        console.log(error);
         return NextResponse.json(
             { message: error.message },
-            { status: 403 }
+            { status: 500 }
         );
     }
 }

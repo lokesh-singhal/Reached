@@ -89,7 +89,7 @@ export default function RoomPage() {
 
     getAllReviews();
   }, [])
-  const averageRating: number = allReviews.length > 0 ? allReviews.reduce((sum, review) => sum + review.rating, 0) / allReviews.length: 0;
+  const averageRating: number = allReviews.length > 0 ? allReviews.reduce((sum, review) => sum + review.rating, 0) / allReviews.length : 0;
 
   if (!listing) {
     return <div className='mx-auto'>Wait while loading listing...</div>
@@ -115,9 +115,9 @@ export default function RoomPage() {
             <span className='text-2xl'>{listing?.maxGuests} guests • {averageRating} rating</span>
           </div>
           <div className='flex gap-2 items-center'>
-            <div className='h-10 w-10 rounded-full bg-gray-300'>
-              <img src="profile.svg" alt="" />
-            </div>
+
+            <UserRound className='h-10 w-10 p-1 rounded-full bg-gray-300' />
+
             <div className='flex flex-col'>
               <span className='font-semibold'>Hosted by {listing?.host.name}</span>
               <span>{listing?.host.email}</span>

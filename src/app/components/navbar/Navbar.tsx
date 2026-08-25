@@ -10,6 +10,7 @@ import { format } from 'date-fns';
 import { UserRound } from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
 import SearchSmall from '../SearchSmall';
+import Link from 'next/link';
 
 const formatted = (range: DateRange | undefined) => {
   if (!range?.from || !range.to) return;
@@ -103,7 +104,7 @@ const Navbar = () => {
           <span className='text-2xl max-xl:lg:hidden'>Reached</span>
         </div>
         <div className='justify-self-end lg:col-start-3 flex gap-4 items-center justify-center pr-3'>
-          <div className='text-[18px] max-xl:hidden'>Become a host</div>
+          <Link href={!session ? "/sign-in" : "/host"} target='_blank' rel='noopener onreferrer' className='text-[18px] max-xl:hidden'>Become a host</Link>
           <div onClick={() => router.push("/profile")} className={`h-10 w-10 rounded-full cursor-pointer bg-gray-400 justify-center self-center ${session ? "" : "hidden"}`}>
             <UserRound size={35} className='pl-1' />
           </div>

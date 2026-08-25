@@ -33,14 +33,14 @@ export default function BookingSummary({ listing, checkIn, checkOut, guests }: {
     <div className="bg-white rounded-2xl relative shadow-sm border p-6 space-y-6">
 
       <div className="flex gap-4">
-        <div className="relative w-50 rounded-xl">
+        <div className="relative w-50 rounded-xl overflow-hidden">
           {/* <Image
             src= {listing.houseImageUrl[0]}
             alt="Listing"
             fill
             className="object-cover"
           /> */}
-          <img className="object-cover fill" src={listing.houseImageUrl[0]} alt="image" />
+          <img className="object-cover w-50 h-30 fill" src={listing.houseImageUrl[0]} alt="image" />
         </div>
 
         <div>

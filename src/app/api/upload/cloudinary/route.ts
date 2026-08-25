@@ -6,42 +6,49 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
 
-    const file = formData.get("image");
+    const files = formData.getAll("images") as File[];
 
-    if (!(file instanceof File)) {
+    if (files.length === 0) {
       return NextResponse.json(
         { message: "Image is required" },
         { status: 400 }
-      );
-    }
-
-    if (!file.type.startsWith("image/")) {
-      return NextResponse.json(
-        { message: "Only image files are allowed" },
-        { status: 400 }
-      );
+      )
     }
 
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-
-
-    const result = await new Promise<any>((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          folder: "reached",
-        },
-        (error, result) => {
-          if (error) return reject(error);
-          resolve(result);
+    const urls = await Promise.all(
+      files.map(async (file) => {
+        if (!file.type.startsWith("image/")) {
+          return NextResponse.json(
+            { message: "Only image files are allowed" },
+            { status: 400 }
+          );
         }
-      );
 
-      Readable.from(buffer).pipe(uploadStream);
-    });
+        const buffer = Buffer.from(await file.arrayBuffer());
+
+        const result = await new Promise<any>((resolve, reject) => {
+          const uploadStream = cloudinary.uploader.upload_stream(
+            {
+              folder: "reached",
+            },
+            (error, result) => {
+              if (error) return reject(error);
+              resolve(result);
+            }
+          );
+
+          Readable.from(buffer).pipe(uploadStream);
+        });
+
+        return result.secure_url;
+      })
+    )
+
+
 
     return NextResponse.json({
-      url: result.secure_url,
+      urls
     });
   } catch (error) {
     console.error(error);

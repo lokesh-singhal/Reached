@@ -105,6 +105,9 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({message: "Already available booking for this date"}, {status: 400});
         }
 
+        if(guests > listing.maxGuests){
+            return NextResponse.json({message: "Too many guests"}, {status: 400});
+        }
         const Listingprice = listing.price;
         const nights = (checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24);
         const price = Listingprice * nights;
@@ -125,6 +128,7 @@ export async function POST(req: NextRequest) {
             razorpay: order.id,
             checkIn,
             checkOut,
+            guests,
             status: "PENDING",
             totalPrice,
         });

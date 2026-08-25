@@ -7,7 +7,8 @@ export interface Booking extends Document {
     checkIn: Date,
     checkOut: Date,
     status: "pending" | "confirmed" | "cancelled",
-    totalPrice: number
+    totalPrice: number,
+    guests: number
 }
 
 const bookingSchema = new Schema({
@@ -38,6 +39,11 @@ const bookingSchema = new Schema({
         required: true
     },
 
+    guests: {
+        type: Number,
+        required: true
+    },
+
     status: {
         type: String,
         enum: ["PENDING", "CONFIRMED", "CANCELLED"],
@@ -50,7 +56,7 @@ const bookingSchema = new Schema({
         required: true
     },
 
-})
+}, {timestamps: true});
 
 const BookingModel = (mongoose.models.Booking as mongoose.Model<Booking>) || mongoose.model<Booking>("Booking", bookingSchema);
 

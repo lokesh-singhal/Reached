@@ -7,6 +7,7 @@ import "leaflet/dist/leaflet.css";
 import "react-day-picker/dist/style.css";
 import { Toaster } from "./components/ui/sonner";
 import Footer from "./components/Footer";
+import LayoutContent from "./components/LayoutContext";
 
 
 const geistSans = Geist({
@@ -37,16 +38,9 @@ export default function RootLayout({
         <Script
           src="https://checkout.razorpay.com/v1/checkout.js"
         />
-        <Navbar />
-
-
-        <main className="flex-1">
-          <Toaster />
+        <LayoutContent>
           {children}
-        </main>
-        
-
-        <Footer />
+        </LayoutContent>
       </body>
     </html>
   );

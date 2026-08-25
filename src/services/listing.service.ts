@@ -26,6 +26,7 @@ interface ReviewType {
 
 class ListingService {
     static async createListing(data: createListingInput) {
+        console.log(data.houseImageUrl)
         const listing = await ListingModel.create({
             host: data.hostId,
             title: data.title,
@@ -34,7 +35,10 @@ class ListingService {
             address: data.address,
             city: data.city,
             state: data.state,
-            location: data.location,
+            location: {
+                type: "Point",
+                coordinates: data.location.coordinates
+            },
             maxGuests: data.maxGuests,
             price: data.price,
             status: "ACTIVE"
@@ -92,14 +96,11 @@ class ListingService {
     }
 
     static async deleteListing(listingId: string, hostId: string) {
-        const listing = await ListingModel.findById(listingId);
+        const listing = await ListingModel.findByIdAndDelete(listingId);
 
         if (!listing) {
             throw new Error("Listing does not exist");
         }
-
-        listing.status = "INACTIVE";
-        await listing.save();
 
         return { success: true };
 

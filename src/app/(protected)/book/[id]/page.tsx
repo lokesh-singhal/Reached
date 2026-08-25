@@ -82,7 +82,7 @@ export default function ConfirmPage() {
           listingId: listing?._id,
           checkIn: new Date(checkIn),
           checkOut: new Date(checkOut),
-          guests
+          guests: Number(guests)
         })
       })
       if(!res.ok){

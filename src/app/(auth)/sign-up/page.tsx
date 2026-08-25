@@ -71,7 +71,7 @@ export default function signUp() {
 
     return (
         <>
-            <div className="min-h-[80vh] flex items-center justify-center px-4">
+            <div className="min-h-[80vh] flex mt-20 items-center justify-center px-4">
                 <div className="flex w-full max-w-5xl bg-white rounded-2xl overflow-hidden">
 
                     <div className="w-full bg-emerald-50 lg:w-1/2 flex flex-col px-6 sm:px-10 py-8">

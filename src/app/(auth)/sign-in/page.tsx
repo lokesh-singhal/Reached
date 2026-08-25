@@ -57,7 +57,7 @@ export default function SignIn() {
 
   return (
     <>
-      <div className="flex justify-center min-h-[80vh] overflow-hidden">
+      <div className="flex justify-center min-h-[80vh] mt-20 overflow-hidden">
         <div className="flex max-w-5xl border-0 rounded-2xl bg-emerald-50 w-full  relative">
           <div className="flex flex-col lg:w-1/2 gap-5 px-6 py-8 relative w-full">
             <div className="flex flex-col justify-center items-center gap-1">

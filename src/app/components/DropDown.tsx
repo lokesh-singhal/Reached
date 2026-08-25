@@ -4,6 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Spinner } from './ui/spinner';
+import Link from 'next/link';
 
 export default function DropDown({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: Dispatch<SetStateAction<boolean>> }) {
   const { data: session, isPending, error } = authClient.useSession();
@@ -51,7 +52,7 @@ export default function DropDown({ isOpen, setIsOpen }: { isOpen: boolean, setIs
             <button onClick={() => { setIsOpen(prev => !prev); router.push("/reservations") }} className='cursor-pointer text-start pl-10 text-[17px] hover:bg-gray-100 w-full py-2'>Your Reservations</button>
             <button onClick={() => { setIsOpen(prev => !prev); router.push("/profile") }} className='cursor-pointer text-start pl-10 text-[17px] hover:bg-gray-100 w-full py-2'>Profile</button>
             <div className="w-[80%] h-px bg-gray-300 self-center"></div>
-            <button className='cursor-pointer text-start pl-10 text-[17px] hover:bg-gray-100 w-full py-2'>Become a host</button>
+            <Link onClick={() => setIsOpen(prev => !prev)} href="/host" target='_blank' rel='noopener noreferrer' className='cursor-pointer text-start pl-10 text-[17px] hover:bg-gray-100 w-full py-2'>Become a host</Link>
             <div className="w-[80%] h-px bg-gray-300 self-center"></div>
             <button
               onClick={handleLogOut} disabled={isLoading} className='cursor-pointer disabled:cursor-not-allowed text-start pl-10 text-[17px] hover:bg-gray-100 w-full py-2'>

@@ -154,3 +154,61 @@
     width: 20px;
   }
 }
+
+.rdp-day_booked {
+  position: relative;
+}
+
+.rdp-day_booked::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+
+  top: 25%;
+  height: 50%;
+
+  background: #ff385c;
+  z-index: -1;
+}
+
+.rdp-day_start::after {
+  content: "";
+  position: absolute;
+
+  left: 50%;
+  width: 50%;
+
+  top: 25%;
+  height: 50%;
+
+  background: #ff385c;
+
+  border-top-left-radius: 9999px;
+  border-bottom-left-radius: 9999px;
+
+  z-index: -1;
+}
+
+.rdp-day_end::after {
+  content: "";
+  position: absolute;
+
+  left: 0;
+  width: 50%;
+
+  top: 25%;
+  height: 50%;
+
+  background: #ff385c;
+
+  border-top-right-radius: 9999px;
+  border-bottom-right-radius: 9999px;
+
+  z-index: -1;
+}
+
+.rdp-day_button {
+  position: relative;
+  z-index: 2;
+}
