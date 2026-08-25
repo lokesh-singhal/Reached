@@ -3,7 +3,6 @@ import PriceRow from "./PriceRow";
 import { useState } from "react";
 import DateRangePicker from "./DateRangePicker";
 import GuestPopover from "./GuestsPop";
-import { useSearchParams } from "next/navigation";
 import useUpdateUrlParams from "@/hooks/updateParam";
 
 interface ListingType {
@@ -55,7 +54,7 @@ export default function BookingSummary({ listing, checkIn, checkOut, guests }: {
 
       <hr />
 
-      {/* Cancellation */}
+
       <div>
         <p className="font-medium">Free cancellation</p>
         <p className="text-sm text-gray-600">
@@ -68,7 +67,7 @@ export default function BookingSummary({ listing, checkIn, checkOut, guests }: {
 
       <hr />
 
-      {/* Dates */}
+      
       <div className="flex justify-between items-center">
         <div>
           <p className="font-medium">Dates</p>
@@ -104,7 +103,7 @@ export default function BookingSummary({ listing, checkIn, checkOut, guests }: {
 
       <hr />
 
-      {/* Guests */}
+    
       <div className="relative">
         <div className="flex justify-between items-center">
           <div>
@@ -136,7 +135,7 @@ export default function BookingSummary({ listing, checkIn, checkOut, guests }: {
 
       <hr />
 
-      {/* Price Details */}
+     
       <div className="space-y-3">
         <p className="font-semibold">Price details</p>
 

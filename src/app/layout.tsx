@@ -8,6 +8,7 @@ import "react-day-picker/dist/style.css";
 import { Toaster } from "./components/ui/sonner";
 import Footer from "./components/Footer";
 import LayoutContent from "./components/LayoutContext";
+import { Suspense } from "react";
 
 
 const geistSans = Geist({
@@ -39,7 +40,9 @@ export default function RootLayout({
           src="https://checkout.razorpay.com/v1/checkout.js"
         />
         <LayoutContent>
-          {children}
+          <Suspense fallback={null}>
+            {children}
+          </Suspense>
         </LayoutContent>
       </body>
     </html>

@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Navbar from "./navbar/Navbar";
 import Footer from "./Footer";
 import { Toaster } from "./ui/sonner";
+import { Suspense } from "react";
 
 export default function LayoutContent({
   children,
@@ -13,13 +14,16 @@ export default function LayoutContent({
   const pathname = usePathname();
 
   const isHost = pathname.startsWith("/host");
-  const hideNavbar =  pathname.startsWith("/host") ||
-                      pathname.startsWith("/sign-in") ||
-                      pathname.startsWith("/sign-up");
+  const hideNavbar = pathname.startsWith("/host") ||
+    pathname.startsWith("/sign-in") ||
+    pathname.startsWith("/sign-up");
 
   return (
     <>
-      {!hideNavbar && <Navbar />}
+      {!hideNavbar &&
+        <Suspense fallback={null}>
+          <Navbar />
+        </Suspense>}
 
       <main className="flex-1">
         <Toaster />
@@ -28,5 +32,5 @@ export default function LayoutContent({
 
       {!isHost && <Footer />}
     </>
-  );
+  );  
 }
