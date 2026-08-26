@@ -102,7 +102,7 @@ export default function MyReviews() {
                                 </div>
                             </div>
                             <div className="md:w-[40%] h-full relative">
-                                <img className="object-cover w-full h-full md:max-h-72 border border-white" src={items.listingId.houseImageUrl[0]} alt="" />
+                                <img className="object-cover w-full h-76 md:max-h-72 border border-white" src={items.listingId.houseImageUrl[0]} alt="" />
                             </div>
                         </div>
                     ))

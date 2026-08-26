@@ -115,7 +115,7 @@ const PaymentForm = ({ price, maxGuests, listingId }: cardProps) => {
                         </div>
                     </div>
                     {showCalendar && (
-                        <div className="absolute right-0 w-190 z-50">
+                        <div className="absolute right-0 max-md:left-0 max-md:right-0 md:w-190 z-50">
                             <DateRangePicker
                                 listingId={listingId}
                                 checkInDate={new Date(checkIn)}
@@ -138,7 +138,7 @@ const PaymentForm = ({ price, maxGuests, listingId }: cardProps) => {
                         </div>
                     )}
                     {showGuests && (
-                        <div className="absolute w-120 right-26 border shadow-xl rounded-2xl overflow-hidden border-black top-25">
+                        <div className="absolute md:w-120 z-50 right-0 max-md:left-0 border shadow-xl rounded-2xl overflow-hidden border-black top-25">
                             <GuestPopover
                                 showGuests={showGuests}
                                 setShowGuests={setShowGuests}

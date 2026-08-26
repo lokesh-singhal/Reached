@@ -21,29 +21,6 @@ type Booking = {
     status: string;
 };
 
-// const booking: Booking[] = [
-//     {
-//         id: "1",
-//         user: {
-//             name: "Lokesh Singhal",
-//             email: "lokes@gmail.com",
-//         }
-//         guests: 2,
-//         checkIn: new Date("2026-08-10"),
-//         checkOut: new Date("2026-08-14"),
-//         total: 8500,
-//     },
-//     {
-//         id: "2",
-//         guest: "Alice Smith",
-//         email: "alice@gmail.com",
-//         guests: 4,
-//         checkIn: new Date("2026-08-18"),
-//         checkOut: new Date("2026-08-22"),
-//         total: 12400,
-//     },
-// ];
-
 export default function BookingCalendar() {
     const [selectedBookings, setSelectedBookings] = useState<Booking[] | null>(null);
     const [bookings, setBookings] = useState<Booking[]>([]);
@@ -70,7 +47,6 @@ export default function BookingCalendar() {
     const endDates = bookings.map((b) => startOfDay(new Date(b.checkOut)));
 
     const middleDates = bookings.flatMap((b) => {
-        // Booking is only 1 or 2 days long
         if (new Date(b.checkOut) <= addDays(new Date(b.checkIn), 1)) {
             return [];
         }
@@ -106,7 +82,7 @@ export default function BookingCalendar() {
     }
 
     return (
-        <div className="flex items-center justify-between p-4 gap-6">
+        <div className="flex flex-col md:flex-row items-center justify-between p-4 gap-6">
             <div className="flex w-full flex-1 justify-center items-center h-[85vh] [--cell-size:--spacing(20)]">
                 <Calendar
                     mode="single"
@@ -136,7 +112,7 @@ export default function BookingCalendar() {
                     onDayClick={handleDayClick}
                 />
             </div>
-            <div className="w-80 rounded-xl border p-5 bg-gray-100 h-[85vh] min-h-100 overflow-auto">
+            <div className="md:w-80 w-full rounded-xl border p-5 bg-gray-100 md:h-[85vh] min-h-100 overflow-auto">
                 {selectedBookings ? (
                     <>
                         {selectedBookings.map((selectedBooking) => (

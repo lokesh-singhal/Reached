@@ -97,8 +97,8 @@ const Navbar = () => {
   }
 
   return (
-    <div className='sticky top-0 shadow-md z-100'>
-      <div className='grid grid-cols-2 gap-4 lg:grid-cols-[auto_1fr_auto] max-w-full h-[12%] bg-gray-200 px-4 py-10 md:p-10 items-center '>
+    <div className='sticky top-0 shadow-md z-1001'>
+      <div className='grid grid-cols-2 gap-4 lg:grid-cols-[auto_1fr_auto] max-w-full h-[12%] bg-gray-200 px-2 py-1 pb-2 sm:p-10 items-center '>
         <div onClick={() => router.push("/")} className='flex justify-self-start justify-center items-center cursor-pointer'>
           <img className='h-18' src="/appIcon.svg" alt="App Logo" />
           <span className='text-2xl max-xl:lg:hidden'>Reached</span>

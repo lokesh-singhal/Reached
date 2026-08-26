@@ -125,7 +125,7 @@ export default function RoomPage() {
           </div>
         </div>
         <div className='md:w-1/2'>
-          <div className='min-h-[50vh] bg-gray-200 rounded-2xl mt-15 p-2 lg:p-6 lg:pr-15'>
+          <div className='bg-gray-200 rounded-2xl mt-15 p-2 lg:p-6 lg:pr-15'>
             <PaymentForm listingId={listing?._id} price={listing?.price} maxGuests={listing?.maxGuests} />
           </div>
         </div>
@@ -139,10 +139,10 @@ export default function RoomPage() {
         <div>
           <div className='relative'>
             {showAllReview && (
-              <div className='fixed inset-0 bg-black/50 z-1001'></div>
+              <div className='fixed inset-0 bg-black/50 z-1002'></div>
             )}
             {showAllReview && (
-              <div className='z-1001 fixed rounded-xl bg-gray-100
+              <div className='z-1002 fixed rounded-xl bg-gray-100
                               left-0 right-0 bottom-0 top-2
                               sm:top-10 sm:bottom-0 sm:left-5 sm:right-5
                               md:w-1/2 md:h-auto md:top-1/2 md:left-1/2 md:right-auto md:bottom-auto md:-translate-x-1/2 md:-translate-y-1/2 '>

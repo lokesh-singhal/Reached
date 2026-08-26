@@ -145,7 +145,7 @@ export default function Edit() {
                         <Menu size={25} />
                     </div>
                     {openEditBar && (
-                        <div className="absolute z-1001 overflow-auto bg-gray-50 shadow-xl top-0 left-0 bottom-0 p-4">
+                        <div className="absolute z-1010 overflow-auto bg-gray-50 shadow-xl top-0 left-0 bottom-0 p-4">
                             <EditSidebar setOpenEditBar={setOpenEditBar} listing={listing} />
                         </div>
                     )}

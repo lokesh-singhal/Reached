@@ -37,7 +37,7 @@ export default function PropertyEarning({ propertySummary }: { propertySummary: 
                                 View all
                             </button>
                         } />
-                        <DialogContent className="sm:max-w-7xl z-1001 overflow-auto max-h-[95vh]">
+                        <DialogContent className="sm:max-w-7xl z-1010 overflow-auto max-h-[95vh]">
                             <DialogHeader>
                                 <DialogTitle className={"text-2xl"}>All earning by properties</DialogTitle>
                             </DialogHeader>
