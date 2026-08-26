@@ -6,9 +6,9 @@ interface Params {
     params: Promise<{id: string}>
 }
 
-export async function GET(_:NextRequest, { params }: Params) {
+export async function GET(req:NextRequest, { params }: Params) {
     try {
-        const session = auth.api.getSession();
+        const session = await auth.api.getSession({headers: req.headers});
         if(!session){
             return NextResponse.json({message: "Unauthorized Access"}, {status: 400});
         }
